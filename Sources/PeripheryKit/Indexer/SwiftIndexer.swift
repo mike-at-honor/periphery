@@ -90,12 +90,25 @@ public final class SwiftIndexer {
             )
         }
 
-        try JobPool(jobs: jobs).forEach { job in
-            let elapsed = try Benchmark.measure {
-                try job.perform()
-            }
+        if configuration.debug {
+            let sortedJobs = jobs.sorted { $0.file < $1.file }
+            try sortedJobs.forEach { job in
+                self.logger.debug("[index:swift] \(job.file.path) start")
 
-            self.logger.debug("[index:swift] \(job.file.path) (\(elapsed)s)")
+                let elapsed = try Benchmark.measure {
+                    try job.perform()
+                }
+
+                self.logger.debug("[index:swift] \(job.file.path) done (\(elapsed)s)")
+            }
+        } else {
+            try JobPool(jobs: jobs).forEach { job in
+                let elapsed = try Benchmark.measure {
+                    try job.perform()
+                }
+
+                self.logger.debug("[index:swift] \(job.file.path) (\(elapsed)s)")
+            }
         }
     }
 

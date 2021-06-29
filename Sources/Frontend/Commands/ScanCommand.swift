@@ -77,6 +77,9 @@ struct ScanCommand: FrontendCommand {
     @Flag(help: "Enable verbose logging")
     var verbose: Bool = false
 
+    @Flag(help: "Enable debug mode")
+    var debug: Bool = false
+
     @Flag(help: "Only output results")
     var quiet: Bool = false
 
@@ -167,6 +170,10 @@ struct ScanCommand: FrontendCommand {
 
         if isExplicit("verbose") {
             configuration.verbose = verbose
+        }
+
+        if isExplicit("debug") {
+            configuration.debug = debug
         }
 
         if isExplicit("quiet") {

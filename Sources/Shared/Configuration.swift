@@ -61,6 +61,9 @@ public final class Configuration: Singleton {
     @Setting(key: "verbose", defaultValue: false)
     public var verbose: Bool
 
+    @Setting(key: "debug", defaultValue: false)
+    public var debug: Bool
+
     @Setting(key: "quiet", defaultValue: false)
     public var quiet: Bool
 
@@ -148,6 +151,10 @@ public final class Configuration: Singleton {
             config[$verbose.key] = verbose
         }
 
+        if $debug.hasNonDefaultValue {
+            config[$debug.key] = debug
+        }
+
         if $quiet.hasNonDefaultValue {
             config[$quiet.key] = quiet
         }
@@ -222,6 +229,8 @@ public final class Configuration: Singleton {
                 $disableRedundantPublicAnalysis.assign(value)
             case $verbose.key:
                 $verbose.assign(value)
+            case $debug.key:
+                $debug.assign(value)
             case $quiet.key:
                 $quiet.assign(value)
             case $disableUpdateCheck.key:
@@ -257,6 +266,7 @@ public final class Configuration: Singleton {
         $retainUnusedProtocolFuncParams.reset()
         $disableRedundantPublicAnalysis.reset()
         $verbose.reset()
+        $debug.reset()
         $quiet.reset()
         $disableUpdateCheck.reset()
         $strict.reset()
