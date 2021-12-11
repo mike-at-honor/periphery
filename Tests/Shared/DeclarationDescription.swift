@@ -1,4 +1,3 @@
-import Foundation
 import PeripheryKit
 
 struct DeclarationDescription: CustomStringConvertible {

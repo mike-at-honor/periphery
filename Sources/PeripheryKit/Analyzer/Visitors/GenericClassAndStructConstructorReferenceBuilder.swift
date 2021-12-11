@@ -1,4 +1,3 @@
-import Foundation
 
 /// https://bugs.swift.org/browse/SR-7093
 /// Constructors on a class/struct with generic type parameters are not referenced despite being used.

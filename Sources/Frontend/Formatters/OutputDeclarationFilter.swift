@@ -1,4 +1,3 @@
-import Foundation
 import SystemPackage
 import Shared
 import PeripheryKit
@@ -22,7 +21,7 @@ final class OutputDeclarationFilter: Injectable {
         var reportedExclusions: Set<FilePath> = []
 
         return declarations.filter {
-            let path = $0.declaration.location.file.path
+            let path = $0.location.file.path
 
             if excludedSourceFiles.contains(path) {
                 if !reportedExclusions.contains(path) {

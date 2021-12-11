@@ -1,4 +1,3 @@
-import Foundation
 import Shared
 
 /// Workaround for bug present in Swift 5.3 and below.

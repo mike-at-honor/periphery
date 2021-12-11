@@ -1,6 +1,4 @@
-import Foundation
 import SystemPackage
-import PeripheryKit
 
 protocol XcodeProjectlike: AnyObject {
     var path: FilePath { get }

@@ -1,4 +1,3 @@
-import Foundation
 
 /// Retains static methods used by the Result Builder language feature.
 final class ResultBuilderRetainer: SourceGraphVisitor {

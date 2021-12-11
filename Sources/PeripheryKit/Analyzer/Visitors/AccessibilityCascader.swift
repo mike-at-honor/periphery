@@ -1,4 +1,3 @@
-import Foundation
 
 final class AccessibilityCascader: SourceGraphVisitor {
     static func make(graph: SourceGraph) -> Self {

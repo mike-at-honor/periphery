@@ -1,5 +1,3 @@
-import Foundation
-import Shared
 
 final class PropertyWrapperRetainer: SourceGraphVisitor {
     static func make(graph: SourceGraph) -> Self {

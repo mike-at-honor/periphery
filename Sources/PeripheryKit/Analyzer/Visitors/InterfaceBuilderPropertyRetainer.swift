@@ -1,4 +1,3 @@
-import Foundation
 
 class InterfaceBuilderPropertyRetainer {
     private let graph: SourceGraph

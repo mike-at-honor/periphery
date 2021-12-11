@@ -1,4 +1,3 @@
-import Foundation
 
 public class SourceLocation {
     public let file: SourceFile

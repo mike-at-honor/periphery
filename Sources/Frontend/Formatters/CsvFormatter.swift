@@ -1,4 +1,3 @@
-import Foundation
 import Shared
 import PeripheryKit
 
@@ -17,34 +16,40 @@ final class CsvFormatter: OutputFormatter {
         logger.info("Kind,Name,Modifiers,Attributes,Accessibility,IDs,Location,Hints", canQuiet: false)
 
         for result in results {
-            let line = format(
-                kind: result.declaration.kind.rawValue,
-                name: result.declaration.name,
-                modifiers: result.declaration.modifiers,
-                attributes: result.declaration.attributes,
-                accessibility: result.declaration.accessibility.value.rawValue,
-                usrs: result.declaration.usrs,
-                location: result.declaration.location,
-                hint: describe(result.annotation)
-            )
-            logger.info(line, canQuiet: false)
-
-            switch result.annotation {
-            case let .redundantProtocol(references: references):
-                for ref in references {
-                    let line = format(
-                        kind: ref.kind.rawValue,
-                        name: ref.name,
-                        modifiers: [],
-                        attributes: [],
-                        accessibility: nil,
-                        usrs: [ref.usr],
-                        location: ref.location,
-                        hint: redundantConformanceHint)
-                    logger.info(line, canQuiet: false)
-                }
-            default:
+            switch result {
+            case let .import(statement):
+                // TODO
                 break
+            case let .declaration(declaration, annotation):
+                let line = format(
+                    kind: declaration.kind.rawValue,
+                    name: declaration.name,
+                    modifiers: declaration.modifiers,
+                    attributes: declaration.attributes,
+                    accessibility: declaration.accessibility.value.rawValue,
+                    usrs: declaration.usrs,
+                    location: declaration.location,
+                    hint: describe(annotation)
+                )
+                logger.info(line, canQuiet: false)
+
+                switch annotation {
+                case let .redundantProtocol(references: references):
+                    for ref in references {
+                        let line = format(
+                            kind: ref.kind.rawValue,
+                            name: ref.name,
+                            modifiers: [],
+                            attributes: [],
+                            accessibility: nil,
+                            usrs: [ref.usr],
+                            location: ref.location,
+                            hint: redundantConformanceHint)
+                        logger.info(line, canQuiet: false)
+                    }
+                default:
+                    break
+                }
             }
         }
     }

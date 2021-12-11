@@ -1,4 +1,3 @@
-import Foundation
 
 // https://bugs.swift.org/browse/SR-13792
 // The index store does not contain references to `appendInterpolation` functions from their use in string literals.

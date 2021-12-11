@@ -1,8 +1,6 @@
-import Foundation
 import XcodeProj
 import SystemPackage
 import PeripheryKit
-import Shared
 
 final class XcodeTarget {
     static func make(project: XcodeProject, target: PBXTarget) -> Self {

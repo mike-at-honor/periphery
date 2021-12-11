@@ -1,6 +1,5 @@
 // periphery:ignore:all
 
-import Foundation
 
 final class SourceGraphDebugger {
     private let graph: SourceGraph

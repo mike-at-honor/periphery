@@ -1,5 +1,3 @@
-import Foundation
-import SystemPackage
 
 struct AssetReference: Hashable {
     init(absoluteName: String, source: ProjectFileKind) {

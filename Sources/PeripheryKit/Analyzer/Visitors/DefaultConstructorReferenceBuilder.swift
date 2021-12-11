@@ -1,4 +1,3 @@
-import Foundation
 
 final class DefaultConstructorReferenceBuilder: SourceGraphVisitor {
     static func make(graph: SourceGraph) -> Self {

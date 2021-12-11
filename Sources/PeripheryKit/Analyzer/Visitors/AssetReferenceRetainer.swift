@@ -1,5 +1,3 @@
-import Foundation
-
 /// Retains references from non-Swift assets, such as interface builder, Info.plist and CoreData models.
 final class AssetReferenceRetainer: SourceGraphVisitor {
     static func make(graph: SourceGraph) -> Self {

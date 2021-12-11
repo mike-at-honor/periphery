@@ -17,6 +17,13 @@ dependencies.append(
         .exact("0.50500.0")
     )
 )
+dependencies.append(
+    .package(
+        name: "IndexStoreDB",
+        url: "https://github.com/apple/indexstore-db",
+        .branch("release/5.5")
+    )
+)
 #elseif swift(>=5.4)
 dependencies.append(
     .package(
@@ -69,7 +76,8 @@ var targets: [PackageDescription.Target] = [
             .product(name: "SystemPackage", package: "swift-system"),
             .product(name: "AEXML", package: "AEXML"),
             .product(name: "SwiftSyntax", package: "SwiftSyntax"),
-            .product(name: "SwiftIndexStore", package: "SwiftIndexStore")
+            .product(name: "SwiftIndexStore", package: "SwiftIndexStore"),
+            .product(name: "IndexStoreDB", package: "IndexStoreDB")
         ]
     ),
     .target(

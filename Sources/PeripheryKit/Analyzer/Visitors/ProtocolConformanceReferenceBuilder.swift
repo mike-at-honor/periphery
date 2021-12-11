@@ -1,4 +1,3 @@
-import Foundation
 
 final class ProtocolConformanceReferenceBuilder: SourceGraphVisitor {
     static func make(graph: SourceGraph) -> Self {

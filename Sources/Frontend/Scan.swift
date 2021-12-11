@@ -1,4 +1,3 @@
-import Foundation
 import Shared
 import PeripheryKit
 
@@ -47,6 +46,6 @@ final class Scan: Injectable {
         }
 
         try Analyzer.perform(graph: graph)
-        return ScanResultBuilder.build(for: graph)
+        return ScanResultBuilder(graph: graph).build()
     }
 }

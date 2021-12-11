@@ -1,4 +1,3 @@
-import Foundation
 
 final class ProtocolExtensionReferenceBuilder: SourceGraphVisitor {
     static func make(graph: SourceGraph) -> Self {

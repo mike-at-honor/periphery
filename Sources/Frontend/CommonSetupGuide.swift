@@ -1,4 +1,3 @@
-import Foundation
 import Shared
 
 final class CommonSetupGuide: SetupGuideHelpers, SetupGuide {

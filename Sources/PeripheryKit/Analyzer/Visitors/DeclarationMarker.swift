@@ -1,4 +1,3 @@
-import Foundation
 
 final class DeclarationMarker: SourceGraphVisitor {
     static func make(graph: SourceGraph) -> Self {

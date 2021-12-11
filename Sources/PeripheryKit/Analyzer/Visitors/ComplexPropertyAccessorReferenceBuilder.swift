@@ -1,4 +1,3 @@
-import Foundation
 
 // Builds references to getters and setters from complex properties. A complex property is one that
 // explicitly implements a get, set, willSet or didSet. Accessors are distinct declarations and hold

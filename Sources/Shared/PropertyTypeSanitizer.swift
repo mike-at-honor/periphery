@@ -1,4 +1,3 @@
-import Foundation
 
 public struct PropertyTypeSanitizer {
     public static func sanitize(_ types: [String]) -> [String] {

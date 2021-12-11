@@ -17,35 +17,41 @@ final class JsonFormatter: OutputFormatter {
         var jsonObject: [Any] = []
 
         for result in results {
-            let object: [AnyHashable: Any] = [
-                "kind": result.declaration.kind.rawValue,
-                "name": result.declaration.name ?? "",
-                "modifiers": Array(result.declaration.modifiers),
-                "attributes": Array(result.declaration.attributes),
-                "accessibility": result.declaration.accessibility.value.rawValue,
-                "ids": Array(result.declaration.usrs),
-                "hints": [describe(result.annotation)],
-                "location": result.declaration.location.description
-            ]
-            jsonObject.append(object)
-
-            switch result.annotation {
-            case let .redundantProtocol(references: references):
-                for ref in references {
-                    let object: [AnyHashable: Any] = [
-                        "kind": ref.kind.rawValue,
-                        "name": ref.name ?? "",
-                        "modifiers": [],
-                        "attributes": [],
-                        "accessibility": "",
-                        "ids": [ref.usr],
-                        "hints": [redundantConformanceHint],
-                        "location": ref.location.description
-                    ]
-                    jsonObject.append(object)
-                }
-            default:
+            switch result {
+            case let .import(statement):
+                // TODO
                 break
+            case let .declaration(declaration, annotation):
+                let object: [AnyHashable: Any] = [
+                    "kind": declaration.kind.rawValue,
+                    "name": declaration.name ?? "",
+                    "modifiers": Array(declaration.modifiers),
+                    "attributes": Array(declaration.attributes),
+                    "accessibility": declaration.accessibility.value.rawValue,
+                    "ids": Array(declaration.usrs),
+                    "hints": [describe(annotation)],
+                    "location": declaration.location.description
+                ]
+                jsonObject.append(object)
+
+                switch annotation {
+                case let .redundantProtocol(references: references):
+                    for ref in references {
+                        let object: [AnyHashable: Any] = [
+                            "kind": ref.kind.rawValue,
+                            "name": ref.name ?? "",
+                            "modifiers": [],
+                            "attributes": [],
+                            "accessibility": "",
+                            "ids": [ref.usr],
+                            "hints": [redundantConformanceHint],
+                            "location": ref.location.description
+                        ]
+                        jsonObject.append(object)
+                    }
+                default:
+                    break
+                }
             }
         }
 

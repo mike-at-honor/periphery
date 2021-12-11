@@ -1,4 +1,3 @@
-import Foundation
 import SystemPackage
 import Shared
 import PeripheryKit
@@ -66,7 +65,7 @@ final class ScanBehavior {
         do {
             results = try block(project)
             let filteredResults = OutputDeclarationFilter.make().filter(results)
-            let sortedResults = filteredResults.sorted { $0.declaration < $1.declaration }
+            let sortedResults = filteredResults.sorted { $0.location < $1.location }
             try configuration.outputFormat.formatter.make().perform(sortedResults)
 
             if filteredResults.count > 0,

@@ -1,7 +1,5 @@
-import Foundation
 import XCTest
 @testable import XcodeSupport
-@testable import PeripheryKit
 
 class XcodeSchemeTest: XCTestCase {
     private var scheme: XcodeScheme!

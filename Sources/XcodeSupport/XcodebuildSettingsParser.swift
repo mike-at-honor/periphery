@@ -1,4 +1,3 @@
-import Foundation
 
 final class XcodebuildSettingsParser {
     private let lines: [String]

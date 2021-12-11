@@ -1,5 +1,3 @@
-import Foundation
-import PeripheryKit
 import Shared
 
 final class XcodeScheme {

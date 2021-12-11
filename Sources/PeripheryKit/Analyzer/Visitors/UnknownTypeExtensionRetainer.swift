@@ -1,4 +1,3 @@
-import Foundation
 
 /// Retains extensions of types for which we do not have a declaration.
 final class UnknownTypeExtensionRetainer: SourceGraphVisitor {

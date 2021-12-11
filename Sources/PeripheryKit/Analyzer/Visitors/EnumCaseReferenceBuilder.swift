@@ -1,4 +1,3 @@
-import Foundation
 
 /// Builds references to enum cases of enums that are raw representable.
 final class EnumCaseReferenceBuilder: SourceGraphVisitor {

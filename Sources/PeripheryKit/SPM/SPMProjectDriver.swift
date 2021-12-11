@@ -1,4 +1,3 @@
-import Foundation
 import SystemPackage
 import Shared
 
@@ -77,6 +76,7 @@ extension SPMProjectDriver: ProjectDriver {
 
         try SwiftIndexer.make(storePath: storePath, sourceFiles: sourceFiles, graph: graph).perform()
 
+        graph.indexStorePath = storePath
         graph.indexingComplete()
     }
 

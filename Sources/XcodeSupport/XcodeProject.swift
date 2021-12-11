@@ -1,7 +1,5 @@
-import Foundation
 import XcodeProj
 import SystemPackage
-import PeripheryKit
 import Shared
 
 final class XcodeProject: XcodeProjectlike {

@@ -1,4 +1,3 @@
-import Foundation
 import Shared
 
 public final class Analyzer {
@@ -53,7 +52,8 @@ public final class Analyzer {
         AssignOnlyPropertyReferenceEliminator.self,
 
         DeclarationMarker.self,
-        RedundantProtocolMarker.self
+        RedundantProtocolMarker.self,
+        UnusedImportMarker.self
     ]
 
     private let graph: SourceGraph

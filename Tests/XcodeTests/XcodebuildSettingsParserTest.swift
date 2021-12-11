@@ -1,7 +1,5 @@
-import Foundation
 import XCTest
 @testable import XcodeSupport
-@testable import PeripheryKit
 
 class XcodebuildSettingsParserTest: XCTestCase {
     private static var project: XcodeProject!

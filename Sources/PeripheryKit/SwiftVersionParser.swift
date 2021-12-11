@@ -1,4 +1,3 @@
-import Foundation
 import Shared
 
 public struct SwiftVersionParser {

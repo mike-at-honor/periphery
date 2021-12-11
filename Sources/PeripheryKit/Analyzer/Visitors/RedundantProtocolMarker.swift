@@ -1,4 +1,3 @@
-import Foundation
 
 /// A protocol is considered redundant when it's never used as an existential type, despite being conformed to.
 final class RedundantProtocolMarker: SourceGraphVisitor {

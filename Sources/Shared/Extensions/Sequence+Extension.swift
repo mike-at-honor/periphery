@@ -1,4 +1,3 @@
-import Foundation
 
 extension Sequence {
     public func mapFirst<T>(_ transform: (Self.Element) throws -> T?) rethrows -> T? {

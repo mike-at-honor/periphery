@@ -1,4 +1,3 @@
-import Foundation
 
 final class AncestralReferenceEliminator: SourceGraphVisitor {
     static func make(graph: SourceGraph) -> Self {

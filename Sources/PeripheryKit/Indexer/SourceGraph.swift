@@ -2,11 +2,14 @@ import Foundation
 import Shared
 
 public final class SourceGraph {
+    public var indexStorePath: String!
+
     private(set) public var allDeclarations: Set<Declaration> = []
     private(set) public var reachableDeclarations: Set<Declaration> = []
     private(set) public var redundantProtocols: [Declaration: Set<Reference>] = [:]
     private(set) public var rootDeclarations: Set<Declaration> = []
     private(set) public var redundantPublicAccessibility: [Declaration: Set<String>] = [:]
+    private(set) public var unusedImports: Set<ImportStatement> = []
 
     private(set) var rootReferences: Set<Reference> = []
     private(set) var allReferences: Set<Reference> = []
@@ -15,6 +18,7 @@ public final class SourceGraph {
     private(set) var ignoredDeclarations: Set<Declaration> = []
     private(set) var assetReferences: Set<AssetReference> = []
     private(set) var mainAttributedDeclarations: Set<Declaration> = []
+    private(set) var allReferencesBySourceFile: [SourceFile: Set<Reference>] = [:]
 
     private var allReferencesByUsr: [String: Set<Reference>] = [:]
     private var allDeclarationsByKind: [Declaration.Kind: Set<Declaration>] = [:]
@@ -113,6 +117,12 @@ public final class SourceGraph {
         }
     }
 
+    func markUnusedImport(_ statement: ImportStatement) {
+        mutationQueue.sync {
+            _ = unusedImports.insert(statement)
+        }
+    }
+
     func isRetained(_ declaration: Declaration) -> Bool {
         mutationQueue.sync {
             retainedDeclarations.contains(declaration)
@@ -158,12 +168,8 @@ public final class SourceGraph {
 
     func addUnsafe(_ reference: Reference) {
         _ = allReferences.insert(reference)
-
-        if allReferencesByUsr[reference.usr] == nil {
-            allReferencesByUsr[reference.usr] = []
-        }
-
-        allReferencesByUsr[reference.usr]?.insert(reference)
+        allReferencesBySourceFile[reference.location.file, default: []].insert(reference)
+        allReferencesByUsr[reference.usr, default: []].insert(reference)
     }
 
     func add(_ reference: Reference, from declaration: Declaration) {
