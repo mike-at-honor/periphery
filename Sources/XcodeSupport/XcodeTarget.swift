@@ -5,11 +5,6 @@ import PeripheryKit
 import Shared
 
 final class XcodeTarget {
-    static func make(project: XcodeProject, target: PBXTarget) -> Self {
-        return self.init(project: project,
-                         target: target)
-    }
-
     let project: XcodeProject
 
     private let target: PBXTarget
@@ -41,6 +36,10 @@ final class XcodeTarget {
 
     func files(kind: ProjectFileKind) -> Set<FilePath> {
         files[kind, default: []]
+    }
+
+    var hasPackageProductDependencies: Bool {
+        !target.packageProductDependencies.isEmpty
     }
 
     // MARK: - Private

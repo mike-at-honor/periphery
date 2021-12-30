@@ -21,6 +21,7 @@ final class XcodeWorkspace: XcodeProjectlike {
     private let xcworkspace: XCWorkspace
 
     private(set) var targets: Set<XcodeTarget> = []
+    private(set) var packages: Set<SPM.Package> = []
 
     required init(path: FilePath, xcodebuild: Xcodebuild, configuration: Configuration, logger: Logger) throws {
         logger.contextualized(with: "xcode:workspace").debug("Loading \(path)")
@@ -37,9 +38,15 @@ final class XcodeWorkspace: XcodeProjectlike {
         }
 
         let projectPaths = collectProjectPaths(in: xcworkspace.data.children)
-        targets = Set(try projectPaths
-                        .compactMap { try XcodeProject.tryMake(path: (sourceRoot.pushing( $0)), referencedBy: self.path) }
-            .flatMap { $0.targets })
+        let projects = Set(try projectPaths.compactMap { try XcodeProject.tryMake(path: (sourceRoot.pushing($0)), referencedBy: self.path) })
+
+        targets = projects.reduce(into: .init()) { result, project in
+            result.formUnion(project.targets)
+        }
+
+        packages = projects.reduce(into: .init()) { result, project in
+            result.formUnion(project.packages)
+        }
     }
 
     func schemes() throws -> Set<XcodeScheme> {

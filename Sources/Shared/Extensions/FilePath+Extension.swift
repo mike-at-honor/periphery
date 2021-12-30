@@ -24,10 +24,10 @@ public extension FilePath {
         URL(fileURLWithPath: lexicallyNormalized().string)
     }
 
-    func chdir(closure: () -> Void) {
+    func chdir(closure: () throws -> Void) rethrows {
         let previous = Self.current
         _ = fileManager.changeCurrentDirectoryPath(string)
-        closure()
+        try closure()
         _ = fileManager.changeCurrentDirectoryPath(previous.string)
     }
 

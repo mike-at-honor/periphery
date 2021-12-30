@@ -24,9 +24,9 @@ public struct SPM {
         }
 
         public let name: String
+        public let path: String
 
         let targets: [Target]
-        let path: String
 
         public var swiftTargets: [Target] {
             targets.filter { $0.moduleType == "SwiftTarget" }
@@ -41,9 +41,14 @@ public struct SPM {
     public struct Target: Decodable {
         public let name: String
 
+        let sources: [String]
         let path: String
         let moduleType: String
-        let sources: [String]
+
+        public var sourcePaths: [FilePath] {
+            let root = FilePath(path)
+            return sources.map { root.appending($0) }
+        }
 
         func build(additionalArguments: [String]) throws {
             let shell: Shell = inject()
@@ -55,5 +60,29 @@ public struct SPM {
 
             try shell.exec(args)
         }
+    }
+}
+
+extension SPM.Package: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(path)
+    }
+}
+
+extension SPM.Package: Equatable {
+    public static func == (lhs: SPM.Package, rhs: SPM.Package) -> Bool {
+        lhs.path == rhs.path
+    }
+}
+
+extension SPM.Target: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+    }
+}
+
+extension SPM.Target: Equatable {
+    public static func == (lhs: SPM.Target, rhs: SPM.Target) -> Bool {
+        lhs.name == rhs.name
     }
 }

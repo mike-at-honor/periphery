@@ -1542,9 +1542,9 @@ final class RetentionTest: SourceGraphTestCase {
 
         let newFixtureTarget = SPM.Target(
             name: target.name,
+            sources: [testFixturePath.lastComponent?.string ?? ""],
             path: target.path,
-            moduleType: target.moduleType,
-            sources: [testFixturePath.lastComponent?.string ?? ""])
+            moduleType: target.moduleType)
 
         var targets = [newFixtureTarget]
 

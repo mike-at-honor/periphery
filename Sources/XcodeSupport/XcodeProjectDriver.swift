@@ -19,8 +19,33 @@ public final class XcodeProjectDriver {
         }
 
         // Ensure targets are part of the project
-        let targets = project.targets.filter { configuration.targets.contains($0.name) }
-        let invalidTargetNames = Set(configuration.targets).subtracting(targets.map { $0.name })
+        var configurationTargets = Set(configuration.targets)
+        var invalidTargetNames: [String] = []
+
+        let targets = project.targets.filter {
+            if configuration.targets.contains($0.name) {
+                configurationTargets.remove($0.name)
+                return true
+            }
+
+            invalidTargetNames.append($0.name)
+            return false
+        }
+
+        let packageTargets = configurationTargets.reduce(into: [SPM.Package: Set<SPM.Target>]()) { result, targetPath in
+            let parts = targetPath.split(separator: ".", maxSplits: 1)
+
+            if let packageName = parts.first,
+               let targetName = parts.last,
+               let package = project.packages.first(where: { $0.name == packageName }),
+               let target = package.swiftTargets.first(where: { $0.name == targetName })
+            {
+                result[package, default: []].insert(target)
+                return
+            }
+
+            invalidTargetNames.append(targetPath)
+        }
 
         if !invalidTargetNames.isEmpty {
             throw PeripheryError.invalidTargets(names: invalidTargetNames.sorted(), project: project.path.lastComponent?.string ?? "")
@@ -40,7 +65,8 @@ public final class XcodeProjectDriver {
             xcodebuild: inject(),
             project: project,
             schemes: schemes,
-            targets: targets
+            targets: targets,
+            packageTargets: packageTargets
         )
     }
 
@@ -50,6 +76,7 @@ public final class XcodeProjectDriver {
     private let project: XcodeProjectlike
     private let schemes: Set<XcodeScheme>
     private let targets: Set<XcodeTarget>
+    private let packageTargets: [SPM.Package: Set<SPM.Target>]
 
     init(
         logger: Logger,
@@ -57,7 +84,8 @@ public final class XcodeProjectDriver {
         xcodebuild: Xcodebuild,
         project: XcodeProjectlike,
         schemes: Set<XcodeScheme>,
-        targets: Set<XcodeTarget>
+        targets: Set<XcodeTarget>,
+        packageTargets: [SPM.Package: Set<SPM.Target>]
     ) {
         self.logger = logger
         self.configuration = configuration
@@ -65,6 +93,7 @@ public final class XcodeProjectDriver {
         self.project = project
         self.schemes = schemes
         self.targets = targets
+        self.packageTargets = packageTargets
     }
 
     // MARK: - Private
@@ -116,6 +145,7 @@ extension XcodeProjectDriver: ProjectDriver {
                 logger.info("\(asterisk) Building \(scheme.name)...")
             }
 
+            // TODO: This doesn't detect SPM test targets
             let buildForTesting = !Set(try scheme.testTargets()).isDisjoint(with: testTargetNames)
             try xcodebuild.build(project: project,
                                  scheme: scheme,
@@ -136,8 +166,20 @@ extension XcodeProjectDriver: ProjectDriver {
 
         try targets.forEach { try $0.identifyFiles() }
 
-        let sourceFiles = targets.reduce(into: [FilePath: [String]]()) { result, target in
-            target.files(kind: .swift).forEach { result[$0, default: []].append(target.name) }
+        var sourceFiles: [FilePath: [String]] = [:]
+
+        for target in targets {
+            target.files(kind: .swift).forEach { sourceFiles[$0, default: []].append(target.name) }
+        }
+
+        for (package, targets) in packageTargets {
+            let packageRoot = FilePath(package.path)
+
+            for target in targets {
+                target.sourcePaths.forEach {
+                    let absolutePath = packageRoot.pushing($0)
+                    sourceFiles[absolutePath, default: []].append(target.name) }
+            }
         }
 
         try SwiftIndexer.make(storePath: storePath, sourceFiles: sourceFiles, graph: graph).perform()

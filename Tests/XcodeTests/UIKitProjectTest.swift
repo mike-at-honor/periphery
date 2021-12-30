@@ -16,7 +16,8 @@ class UIKitProjectTest: SourceGraphTestCase {
             xcodebuild: inject(),
             project: project,
             schemes: [try! XcodeScheme.make(project: project, name: "UIKitProject")],
-            targets: project.targets
+            targets: project.targets,
+            packageTargets: [:]
         )
 
         try! driver.build()
